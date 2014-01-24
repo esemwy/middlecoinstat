@@ -10,14 +10,28 @@ var columnLabels = {
     "paidOut":                  "Paid Out",
     "unexchangedBalance":       "Unexchanged<br/>Balance"
 }
+var exchangeRate = 0.0;
 
 function doneLoading() {
     $("#userid_label").text("Transactions for " + username);
-    setInterval(getJson, 100000);
+    setInterval(getJson, 10000);
 	getJson();
 	}
 	
 function getJson() {
+
+    $.ajax({
+      "url": "https://coinbase.com/api/v1/prices/buy",
+      "cache": true,
+      "success": function(data) {
+            console.log('exchangeRate: '+window.exchangeRate);
+            console.log('new rate:     '+data.total.amount);
+            window.exchangeRate = eval('('+data.total.amount+')');
+      },
+      "error": function(d,msg) {
+          alert("Could not find data");
+      }
+    });
 
     $.ajax({
       "url": "http://www.middlecoin.com/reports/" + username + ".json",
@@ -41,7 +55,16 @@ function getJson() {
           }
           h = '<tr id="total"><td><b>Total</b></td><td>&nbsp;</td><td><b>'+data.total+'</b></td></tr>';
           if (document.getElementById('total') == null)
+			  $("#transactions").append(h);
+          if (window.exchangeRate != 0.0) {
+              theTotal = eval('('+data.total+')');
+              var result = theTotal*window.exchangeRate;
+              h = '<tr id="dollars"><td><b>USD</b></td><td>&nbsp;</td><td><b>$'+result.toFixed(2)+'</b></td></tr>';
+              if (document.getElementById('dollars') == null)
 			      $("#transactions").append(h);
+		  }
+
+
       },
       "error": function(d,msg) {
           alert("Could not find data");
@@ -73,14 +96,6 @@ function getJson() {
                     break;
                 }
             }
-//           h = '';
-//           h = h + '<table>';
-//           for (index = 0; index < data.report.length; ++index) {
-//               h = h + '<tr><td>'+item.txid+'</td><td>'+thedate+'</td><td>'+item.amount+'</td></tr>';
-//           }
-//           h = h + '<tr><td>&nbsp;</td><td>&nbsp;</td><td>'+data.total+'</td></tr>';
-//           h = h + '</table>';
-//           $("#content").html(h);
       },
       "error": function(d,msg) {
           alert("Could not find data");
