@@ -1,0 +1,4 @@
+middlecoinstat
+==============
+
+Middlecoin Status Page
