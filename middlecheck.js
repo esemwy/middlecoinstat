@@ -5,10 +5,10 @@ var columnLabels = {
     "lastHourRejectedShares":	"Rejected Shares<br/>(Last Hour)",
     "megahashesPerSecond":      "MH/s",
     "rejectedMegahashesPerSecond":  "Rejected MH/s",
-    "bitcoinBalance":           "Balance",
     "immatureBalance":          "Immature<br/>balance",
-    "paidOut":                  "Paid Out",
-    "unexchangedBalance":       "Unexchanged<br/>Balance"
+    "unexchangedBalance":       "Unexchanged<br/>Balance",
+    "bitcoinBalance":           "Balance",
+    "paidOut":                  "Paid Out"
 }
 var exchangeRate = 0.0;
 
